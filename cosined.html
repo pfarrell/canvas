@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+      margin: 0px;
+      padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <table  style="margin-top:1em">
+      <tbody>
+        <tr>
+        <!--
+          <td align="center">
+            <form action="#">
+              form
+            </form>
+          </td>
+        -->
+          <td>
+            <div>
+              <canvas id="ripple" height="500" width="600" style="border:solid #FFF 1px;"></canvas>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <script>
+
+      function Cos(x, y, w, h, func) {
+        this.x = x;
+        this.baseY=y
+        this.y = y;
+        this.width = w;
+        this.height = h;
+        this.fill = "#" + randomInt(0,1024);
+        this.func = func;
+
+        Cos.prototype.tick = function(cfg) {
+          if(this.x > (meta.canvas.clientWidth+this.width)) this.x = -1*this.width;
+          this.x = this.x + 2;
+          this.y = this.baseY + this.width + 100 * this.func(this.x/25);
+          return this;
+        }
+
+        Cos.prototype.draw=function(cfg) {
+          cfg.context.beginPath();
+          //cfg.context.rect(this.x, this.y, this.width, this.height);
+          cfg.context.arc(this.x, this.y, this.width, 0, 2*Math.PI, false);
+          cfg.context.fillStyle = this.fill;
+          cfg.context.fill();
+        }
+      }
+
+      function Rect(x, y, w, h, tickX, tickY) {
+        this.x = x;
+        this.xDir=1;
+        this.y = y;
+        this.yDir=1;
+        this.width = w;
+        this.height = h;
+        this.fill = "#" + randomInt(0,1024);
+        this.tickX = tickX;
+        this.tickY = tickY;
+
+        Rect.prototype.tick=function(cfg) {
+          if(this.x < 0) this.xDir = 1;
+          if(this.x > (meta.canvas.clientWidth-this.width)) this.xDir = -1;
+          if(this.y < 0) this.yDir = 1;
+          if(this.y > (meta.canvas.clientHeight-this.height)) this.yDir = -1;
+          this.x = this.x + this.xDir * this.tickX;
+          this.y = this.y + this.yDir * this.tickY;
+          return this;
+        };
+
+        Rect.prototype.draw=function(cfg) {
+          cfg.context.beginPath();
+          //cfg.context.rect(this.x, this.y, this.width, this.height);
+          cfg.context.arc(this.x, this.y, this.width, 0, 2*Math.PI, false);
+          cfg.context.fillStyle = this.fill;
+          cfg.context.fill();
+        }
+      }
+      
+      function init(cfg) {
+        cfg.canvas.addEventListener('mousedown', canvasMouseDown, false);
+        renderNextFrame(cfg);
+      }
+
+      function getMousePos(cfg, evt) {
+        var rect = cfg.canvas.getBoundingClientRect();
+        return {
+           x: evt.clientX - rect.left,
+           y: evt.clientY - rect.top
+        };
+      } 
+
+      function canvasMouseDown(event) {
+        mousePos = getMousePos(meta, event);
+        var num = randomInt(1,200);
+        for(var i = 0; i < num; i++) {
+          var size = randomInt(5,25);
+          meta.state.push(new Rect(mousePos.x, mousePos.y, size, size, randomInt(-1, 1) , randomInt(-1,1) )); 
+        }
+      }
+
+      function renderNextFrame(cfg) {
+        cfg.context.clearRect(0, 0, cfg.canvas.width, cfg.canvas.height);
+        cfg.state = tick(cfg);
+        drawState(cfg);
+        window.setTimeout(renderNextFrame, 1000/cfg.framerate, cfg);
+      }
+
+      function drawState(cfg) {
+        //erase screen
+        cfg.context.clearRect(0, 0, cfg.canvas.width, cfg.canvas.height);
+
+        //draw state
+        for(var i = 0; i<cfg.state.length; i++) {
+          cfg.state[i].draw(cfg);
+        }
+      }
+
+      // returns array 
+      function tick(cfg) {
+        retval = [];
+        for(var i = 0; i<cfg.state.length; i++) {
+          if(cfg.state[i].x < cfg.canvas.clientWidth || cfg.state[i].y < cfg.canvas.clientHeight)
+            retval.push(cfg.state[i].tick());
+        }
+        return retval;
+      }
+
+      function randomInt(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function getSeconds() {
+        return new Date().getTime() / 1000;
+      }
+
+      function round(number, decimals) {
+        return new Number(number+'').toFixed(parseInt(decimals));
+      }
+
+      var meta={
+        canvas: document.getElementById('ripple'),
+        context: document.getElementById('ripple').getContext('2d'),
+        framerate: 60,
+        state: null
+      }
+
+      
+      meta.state = new Array();
+      /*
+      meta.state.push(new Rect(0,0,30,30, .1, 2));
+      meta.state.push(new Rect(0,0,30,30, .3, 1.5));
+      meta.state.push(new Rect(0,0,30,30, .5, 1.2));
+      meta.state.push(new Rect(0,0,30,30, .8, 1.15));
+      meta.state.push(new Rect(0,0,30,30, 1, 1));
+      meta.state.push(new Rect(0,0,30,30, 1.2, .2));
+      meta.state.push(new Rect(0,0,30,30, 1.6, .5));
+      meta.state.push(new Rect(0,0,30,30, 1.8, 1.2));
+      meta.state.push(new Rect(0,0,30,30, 2, .15));
+      meta.state.push(new Cos(0,100,20,20));
+      */
+      for(var i = 0; i<500; i++) {
+        meta.state.push(new Cos(i*-10,140,10,10, function(x){return .2*Math.cos(x);}));
+      }
+      
+      init(meta);
+
+    </script>
+  </body>
+</html>

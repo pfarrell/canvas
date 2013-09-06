@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+      margin: 0px;
+      padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <table  style="margin-top:1em">
+      <tbody>
+        <tr>
+        <!--
+          <td align="center">
+            <form action="#">
+              form
+            </form>
+          </td>
+        -->
+          <td>
+            <div>
+              <canvas id="ripple" height="500" width="600" style="border:solid #666 1px;"></canvas>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <script>
+
+      function Cos(r) {
+        this.r = r;
+        this.fill = "#" + randomInt(0,1024);
+
+        Cos.prototype.draw=function(cfg) {
+        this.fill = "#F" + randomInt(0,90) ;
+          var angle = cfg.generation / 10;
+          var x = this.r * Math.cos(angle) + cfg.origin.x;
+          var y = this.r * Math.sin(angle) + cfg.origin.y;
+          cfg.context.beginPath();
+          cfg.context.rect(x, y, 10, 5);
+          cfg.context.arc(x, y, randomInt(0,100), 0, 2*Math.PI, false);
+          cfg.context.fillStyle = this.fill;
+          cfg.context.fill();
+        }
+      }
+
+      function init(cfg) {
+        cfg.canvas.addEventListener('mousedown', canvasMouseDown, false);
+        renderNextFrame(cfg);
+      }
+
+      function getMousePos(cfg, evt) {
+        var rect = cfg.canvas.getBoundingClientRect();
+        return {
+           x: evt.clientX - rect.left,
+           y: evt.clientY - rect.top
+        };
+      } 
+
+      function canvasMouseDown(event) {
+      }
+
+      function renderNextFrame(cfg) {
+        //cfg.context.clearRect(0, 0, cfg.canvas.width, cfg.canvas.height);
+        cfg.generation += 1;
+        drawState(cfg);
+        window.setTimeout(renderNextFrame, 1000/cfg.framerate, cfg);
+      }
+
+      function drawState(cfg) {
+        //erase screen
+        //cfg.context.clearRect(0, 0, cfg.canvas.width, cfg.canvas.height);
+
+        //draw state
+        for(var i = 0; i<cfg.state.length; i++) {
+          cfg.state[i].draw(cfg);
+        }
+      }
+
+      function randomInt(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function getSeconds() {
+        return new Date().getTime() / 1000;
+      }
+
+      function round(number, decimals) {
+        return new Number(number+'').toFixed(parseInt(decimals));
+      }
+
+      var meta={
+        canvas: document.getElementById('ripple'),
+        context: document.getElementById('ripple').getContext('2d'),
+        origin: {x:document.getElementById('ripple').clientWidth / 2, y:document.getElementById('ripple').clientHeight / 2},
+        generation: 0,
+        framerate: 60,
+        state: null
+      }
+
+      meta.state = new Array();
+      meta.state.push(new Cos(200));
+      /*
+      meta.state.push(new Cos(170));
+      meta.state.push(new Cos(150));
+      meta.state.push(new Cos(130));
+      meta.state.push(new Cos(110));
+      meta.state.push(new Cos(90));
+      */
+      meta.state.push(new Cos(0));
+      //meta.state.push(new Cos(50));
+      //meta.state.push(new Cos(30));
+      //meta.state.push(new Cos(10));
+      
+      init(meta);
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+      margin: 0px;
+      padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+  <!--
+    <table  style="margin-top:1em">
+      <tbody>
+        <tr>
+          <td align="center">
+            <form action="#">
+              form
+            </form>
+          </td>
+          <td>
+            <div>
+            -->
+              <canvas id="vector" height="500" width="500" style="border:solid #666 1px;"></canvas>
+              <!--
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    -->
+    <script>
+      var rect={w:5, h:5};
+      function checkBounds(pos, size, boundary){
+        if(0 < pos - size && pos + size < boundary )
+          return 1;
+        else
+          return -1;
+      }
+
+      function Sprite(location, speed) {
+        this.location = location;
+        this.speed = speed;
+        this.fill = "#" + randomColor();
+
+        Sprite.prototype.tick=function(cfg) {
+          this.speed.x *= checkBounds(this.location.x, rect.w, cfg.canvas.clientWidth);
+          this.speed.y *= checkBounds(this.location.y, rect.h, cfg.canvas.clientHeight);
+          this.location.add(this.speed);
+          return this;
+        }
+
+        Sprite.prototype.draw=function(cfg) {
+          cfg.context.beginPath();
+          cfg.context.rect(this.location.x, this.location.y, rect.w, rect.h);
+          //cfg.context.arc(this.location.x, this.location.y, rect.w/2, 0, 2*Math.PI, false);
+          cfg.context.fillStyle = this.fill;
+          cfg.context.globalAlpha=.5;
+          cfg.context.fill();
+        }
+      }
+
+      function Vector(x, y) {
+        this.x = x;
+        this.y = y;
+        
+        Vector.prototype.add=function(vector) {
+          this.x += vector.x;
+          this.y += vector.y;
+          return this;
+        }
+      }
+
+      function init(cfg) {
+        cfg.canvas.addEventListener('mousedown', canvasMouseDown, false);
+        //cfg.context.beginPath();
+        //cfg.context.moveTo(0,0);
+        //cfg.context.lineTo(cfg.canvas.width, cfg.canvas.height);
+        //cfg.context.stroke();
+        renderNextFrame(cfg);
+      }
+
+      function getMousePos(cfg, evt) {
+        var rect = cfg.canvas.getBoundingClientRect();
+        return {
+           x: evt.clientX - rect.left,
+           y: evt.clientY - rect.top
+        };
+      } 
+
+      function canvasMouseDown(event) {
+        mousePos = getMousePos(meta, event);
+        meta.actors.push(new Sprite(new Vector(mousePos.x, mousePos.y), new Vector(5,5)));
+      }
+
+      function renderNextFrame(cfg) {
+        //cfg.context.clearRect(0, 0, cfg.canvas.width, cfg.canvas.height);
+        cfg.generation += 1;
+        drawState(cfg);
+        tick(cfg);
+        window.setTimeout(renderNextFrame, 1000/cfg.framerate, cfg);
+      }
+
+      function drawState(cfg) {
+        //erase screen
+        //cfg.context.clearRect(0, 0, cfg.canvas.width, cfg.canvas.height);
+
+        //draw state
+        for(var i = 0; i<cfg.actors.length; i++) {
+          cfg.actors[i].draw(cfg);
+        }
+      }
+
+      function tick(cfg) {
+        for(var i = 0; i<cfg.actors.length; i++) {
+          cfg.actors[i] = cfg.actors[i].tick(cfg);
+        }
+      }
+
+      function randomInt(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function randomColor() {
+        return randomInt(0,16777215).toString(16);
+      }
+
+      function getSeconds() {
+        return new Date().getTime() / 1000;
+      }
+
+      function round(number, decimals) {
+        return new Number(number+'').toFixed(parseInt(decimals));
+      }
+
+      var meta={
+        canvas: document.getElementById('vector'),
+        context: document.getElementById('vector').getContext('2d'),
+        generation: 0,
+        framerate:200 ,
+        actors: null
+      }
+
+      meta.actors = new Array();
+      for(var i = 0; i< 10; i++) {
+        var pad1= i%2 == 0 ? 1 : -1;
+        var pad2= i%3 == 0 ? 1 : -1;
+        //meta.actors.push(new Sprite(new Vector(randomInt(rect.w,meta.canvas.width-rect.w-1), randomInt(rect.h,meta.canvas.height-rect.h-1)), new Vector(pad1*randomInt(-5,5),pad2*randomInt(-5,5))));
+        var rand1 = randomInt(-10,10);
+        meta.actors.push(new Sprite(new Vector(randomInt(6,meta.canvas.width-6), randomInt(6,meta.canvas.height-6)), new Vector(pad1*rand1, pad2*rand1)));
+      }
+
+      init(meta);
+
+    </script>
+  </body>
+</html>

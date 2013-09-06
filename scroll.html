@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+      margin: 0px;
+      padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <table  style="margin-top:1em">
+      <tbody>
+        <tr>
+        <!--
+          <td align="center">
+            <form action="#">
+              form
+            </form>
+          </td>
+        -->
+          <td>
+            <div>
+              <canvas id="scroll" height="160" width="800" style="background-color:#000;border:solid #666 1px;"></canvas>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <script>
+      function bld() {
+        var retval = [];
+        for(var i=0; i<arguments.length; i++) {
+          retval.push(new Msg(arguments[i]));
+        }
+        retval.push(new Msg("0"));
+        return retval;
+      }
+      // lowercase needs variable width
+      function A() { return bld("0011111","0100100","1000100","0100100","0011111"); }
+      function B() { return bld("1111111","1001001","1001001","1001001","0110110"); }
+      function C() { return bld("0111110","1000001","1000001","1000001","0100010"); }
+      function D() { return bld("1111111","1000001","1000001","1000001","0111110"); }
+      function E() { return bld("1111111","1001001","1001001","1001001","1000001"); }
+      function F() { return bld("1111111","1001000","1001000","1001000","1000000"); }
+      function G() { return bld("0111110","1000001","1000001","1000101","0100110"); }
+      function H() { return bld("1111111","0001000","0001000","0001000","1111111"); }
+      function I() { return bld("1000001","1000001","1111111","1000001","1000001"); }
+      function J() { return bld("0000110","0000001","1000001","1111110","1000000"); }
+      function K() { return bld("1111111","0001000","0010100","0100010","1000001"); }
+      function L() { return bld("1111111","0000001","0000001","0000001","0000001"); }
+      function M() { return bld("0111111","1000000","0111000","1000000","0111111"); }
+      function N() { return bld("1111111","0100000","0010000","0001000","1111111"); }
+      function O() { return bld("0111110","1000001","1000001","1000001","0111110"); }
+      function P() { return bld("1111111","1001000","1001000","1001000","0110000"); }
+      function Q() { return bld("0111110","1000001","1000101","1000011","0111110"); }
+      function R() { return bld("1111111","1001100","1001010","1001001","0110001"); }
+      function S() { return bld("0110010","1001001","1001001","1001001","0100110"); }
+      function T() { return bld("1000000","1000000","1111111","1000000","1000000"); }
+      function U() { return bld("1111110","0000001","0000001","0000001","1111110"); }
+      function V() { return bld("1111100","0000010","0000001","0000010","1111100"); }
+      function W() { return bld("1111110","0000001","0001110","0000001","1111110"); }
+      function X() { return bld("1100011","0010100","0001000","0010100","1100011"); }
+      function Y() { return bld("1100000","0010000","0001111","0010000","1100000"); }
+      function Z() { return bld("1000011","1000101","1001001","1010001","1100001"); }
+      function a() { return bld("0000000","0000010","0000101","0000110","0000001"); }
+      function b() { return bld("0000000","0000000","0011111","0000101","0000111"); }
+      function c() { return bld("0000000","0000000","0000110","0001001","0001001"); }
+      function d() { return bld("0000000","0000000","0000111","0000101","0011111"); }
+      function e() { return bld("0000000","0000000","0000110","0001011","0000101"); }
+      function f() { return bld("0000000","0000000","0000100","0011111","0010100"); }
+      function g() { return bld("0000000","0000000","0001100","0010101","0001111"); }
+      function h() { return bld("0000000","0011111","0000100","0000100","0000011"); }
+      function i_() { return bld("0000000","0000000","0010111","0000000","0000000"); }
+      function j() { return bld("0000010","0000001","0010110","0000000","0000000"); }
+      function k() { return bld("0000000","0011111","0000010","0000101","0000001"); }
+      function l() { return bld("0000000","0000000","0011110","0000001","0000000"); }
+      function m() { return bld("0000111","0000100","0000011","0000100","0000011"); }
+      function n() { return bld("0000000","0000000","0000111","0000100","0000011"); }
+      function o() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function p() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function q() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function r() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function s() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function t() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function u() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function v() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function w() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function x() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function y() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function z() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+
+      function Msg(str, xStart) {
+        this.msg = str;
+        this.r = 5;
+        this.x = xStart;
+
+        Msg.prototype.draw=function(cfg,xPos,yPos) {
+          for(var i = 0; i<str.length; i++) {
+            if(this.msg[i] == 1) {
+              cfg.context.beginPath();
+              cfg.context.arc(xPos, 2*this.r*i+this.r+yPos, this.r, 0, 2*Math.PI, false);
+              cfg.context.fillStyle = "orange";
+              cfg.context.fill();
+            }
+          }
+          this.x -= 2*this.r;
+        }
+      }
+
+      function init(cfg) {
+        cfg.canvas.addEventListener('mousedown', canvasMouseDown, false);
+        cfg.buffer_1= cfg.buffer_1.concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z());
+        cfg.buffer_2= cfg.buffer_2.concat(a(),b(),c(),d(),e(),f(),g(),h(),i_(),j(),k(),l(),m(),n(),o(),p(),q(),r(),s(),t(),u(),v(),w(),x(),y(),z());
+        for(var i = 0; i<80; i++) {
+          cfg.state[0].push(new Msg("0000000000"));
+          cfg.state[1].push(new Msg("0000000000"));
+        }
+        renderNextFrame(meta);
+      }
+
+      function getMousePos(cfg, evt) {
+        var rect = cfg.canvas.getBoundingClientRect();
+        return {
+           x: evt.clientX - rect.left,
+           y: evt.clientY - rect.top
+        };
+      } 
+
+      function canvasMouseDown(event) {
+        if(meta.enabled) {
+          meta.enabled=false;
+        }else{
+          meta.enabled=true;
+        }
+        renderNextFrame(meta);
+      }
+
+      function renderNextFrame(cfg) {
+        cfg.context.clearRect(0, 0, cfg.canvas.width, cfg.canvas.height);
+        cfg.generation += 1;
+        cfg.state[0].push(cfg.buffer_1.shift());
+        cfg.state[1].push(cfg.buffer_2.shift());
+        cfg.buffer_1.push(cfg.state[0].shift());
+        cfg.buffer_2.push(cfg.state[1].shift());
+        drawState(cfg);
+        if(cfg.enabled) window.setTimeout(renderNextFrame, 1000/cfg.framerate, cfg);
+      }
+
+      function drawState(cfg) {
+        for(var i = 0; i<cfg.state[0].length; i++) {
+          cfg.state[0][i].draw(cfg, 10*i,0);
+        }
+        for(var i = 0; i<cfg.state[1].length; i++) {
+          cfg.state[1][i].draw(cfg, 10*i,80);
+        }
+      }
+
+      function randomInt(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function getSeconds() {
+        return new Date().getTime() / 1000;
+      }
+
+      function round(number, decimals) {
+        return new Number(number+'').toFixed(parseInt(decimals));
+      }
+
+      var meta={
+        canvas: document.getElementById('scroll'),
+        context: document.getElementById('scroll').getContext('2d'),
+        origin: {x:document.getElementById('scroll').clientWidth / 2, y:document.getElementById('scroll').clientHeight / 2},
+        enabled: true,
+        generation: 0,
+        framerate: 60,
+        state:[[],[]],
+        buffer_1: [],
+        buffer_2: []
+      }
+
+      init(meta);
+
+    </script>
+  </body>
+</html>
