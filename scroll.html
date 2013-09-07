@@ -54,7 +54,7 @@
       function O() { return bld("0111110","1000001","1000001","1000001","0111110"); }
       function P() { return bld("1111111","1001000","1001000","1001000","0110000"); }
       function Q() { return bld("0111110","1000001","1000101","1000011","0111110"); }
-      function R() { return bld("1111111","1001100","1001010","1001001","0110001"); }
+      function R() { return bld("1111111","1001000","1001100","1001010","0110001"); }
       function S() { return bld("0110010","1001001","1001001","1001001","0100110"); }
       function T() { return bld("1000000","1000000","1111111","1000000","1000000"); }
       function U() { return bld("1111110","0000001","0000001","0000001","1111110"); }
@@ -63,32 +63,26 @@
       function X() { return bld("1100011","0010100","0001000","0010100","1100011"); }
       function Y() { return bld("1100000","0010000","0001111","0010000","1100000"); }
       function Z() { return bld("1000011","1000101","1001001","1010001","1100001"); }
-      function a() { return bld("0000000","0000010","0000101","0000110","0000001"); }
-      function b() { return bld("0000000","0000000","0011111","0000101","0000111"); }
-      function c() { return bld("0000000","0000000","0000110","0001001","0001001"); }
-      function d() { return bld("0000000","0000000","0000111","0000101","0011111"); }
-      function e() { return bld("0000000","0000000","0000110","0001011","0000101"); }
-      function f() { return bld("0000000","0000000","0000100","0011111","0010100"); }
-      function g() { return bld("0000000","0000000","0001100","0010101","0001111"); }
-      function h() { return bld("0000000","0011111","0000100","0000100","0000011"); }
-      function i_() { return bld("0000000","0000000","0010111","0000000","0000000"); }
-      function j() { return bld("0000010","0000001","0010110","0000000","0000000"); }
-      function k() { return bld("0000000","0011111","0000010","0000101","0000001"); }
-      function l() { return bld("0000000","0000000","0011110","0000001","0000000"); }
-      function m() { return bld("0000111","0000100","0000011","0000100","0000011"); }
-      function n() { return bld("0000000","0000000","0000111","0000100","0000011"); }
-      function o() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function p() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function q() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function r() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function s() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function t() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function u() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function v() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function w() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function x() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function y() { return bld("0000000","0000000","0000000","0000000","0000000"); }
-      function z() { return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function _0() {return bld("0111110","1010001","1001001","1000101","0111110"); }
+      function _1() {return bld("0000000","0100001","1111111","0000001","0000000"); }
+      function _2() {return bld("0100001","1000011","1000101","1001001","0110001"); }
+      function _3() {return bld("0100010","1000001","1001001","1001001","0110110"); }
+      function _4() {return bld("1111000","0001000","0001000","1111111","0001000"); }
+      function _5() {return bld("1110010","1001001","1001001","1001001","1000110"); }
+      function _6() {return bld("0111110","1001001","1001001","1001001","0100110"); }
+      function _7() {return bld("1000001","1000010","1000100","1001000","1110000"); }
+      function _8() {return bld("0110110","1001001","1001001","1001001","0110110"); }
+      function _9() {return bld("0110010","1001001","1001001","1001001","0111110"); }
+      function _exc() {return bld("0000000","0110000","1111101","0110000","0000000"); }
+      function _at() {return bld("0000000","0000000","0000000","0000000","0000000"); }
+      function _hsh() {return bld("0010100","0111110","0010100","0111110","0010100"); }
+      function _dol() {return bld("0010000","0101010","1111111","0101010","0000100"); }
+      function _per() {return bld("0110010","0110100","0001000","0010110","0100110"); }
+      function _amp() {return bld("0110110","1001001","0110101","0000010","0000101"); }
+      function _ast() {return bld("0100100","0011000","0111100","0011000","0100100"); }
+      function _op() {return bld("0000000","0000000","0111110","1000001","0000000"); }
+      function _cp() {return bld("0000000","1000001","0111110","0000000","0000000"); }
+
 
       function Msg(str, xStart) {
         this.msg = str;
@@ -110,8 +104,8 @@
 
       function init(cfg) {
         cfg.canvas.addEventListener('mousedown', canvasMouseDown, false);
-        cfg.buffer_1= cfg.buffer_1.concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z());
-        cfg.buffer_2= cfg.buffer_2.concat(a(),b(),c(),d(),e(),f(),g(),h(),i_(),j(),k(),l(),m(),n(),o(),p(),q(),r(),s(),t(),u(),v(),w(),x(),y(),z());
+        cfg.buffer[0] = cfg.buffer[0].concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z(),_0(),_1(),_2(),_3(),_4(),_5(),_6(),_7(),_8(),_9(),_exc(),_at(),_hsh(),_dol(),_per(),_amp(),_ast(),_op(),_cp());
+        cfg.buffer[1] = cfg.buffer[1].concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z(),_0(),_1(),_2(),_3(),_4(),_5(),_6(),_7(),_8(),_9(),_exc(),_at(),_hsh(),_dol(),_per(),_amp(),_ast(),_op(),_cp());
         for(var i = 0; i<80; i++) {
           cfg.state[0].push(new Msg("0000000000"));
           cfg.state[1].push(new Msg("0000000000"));
@@ -139,10 +133,10 @@
       function renderNextFrame(cfg) {
         cfg.context.clearRect(0, 0, cfg.canvas.width, cfg.canvas.height);
         cfg.generation += 1;
-        cfg.state[0].push(cfg.buffer_1.shift());
-        cfg.state[1].push(cfg.buffer_2.shift());
-        cfg.buffer_1.push(cfg.state[0].shift());
-        cfg.buffer_2.push(cfg.state[1].shift());
+        cfg.state[0].push(cfg.buffer[0].shift());
+        cfg.state[1].push(cfg.buffer[1].shift());
+        cfg.buffer[0].push(cfg.state[0].shift());
+        cfg.buffer[1].push(cfg.state[1].shift());
         drawState(cfg);
         if(cfg.enabled) window.setTimeout(renderNextFrame, 1000/cfg.framerate, cfg);
       }
@@ -174,10 +168,9 @@
         origin: {x:document.getElementById('scroll').clientWidth / 2, y:document.getElementById('scroll').clientHeight / 2},
         enabled: true,
         generation: 0,
-        framerate: 60,
+        framerate: 26,
         state:[[],[]],
-        buffer_1: [],
-        buffer_2: []
+        buffer: [[],[]],
       }
 
       init(meta);
