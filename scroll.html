@@ -28,6 +28,12 @@
       </tbody>
     </table>
     <script>
+
+      function get(n){
+        var half = location.search.split(n+'=')[1];
+        return half? decodeURIComponent(half.split('&')[0]):null;
+      }
+
       function bld() {
         var retval = [];
         for(var i=0; i<arguments.length; i++) {
@@ -36,6 +42,15 @@
         retval.push(new Msg("0"));
         return retval;
       }
+
+      function translate(str) {
+        var retval=[];
+        for(var i=0; i<str.length; i++) {
+          retval = retval.concat(window[str[i]]());
+        }
+        return retval;
+      }  
+
       // lowercase needs variable width
       function A() { return bld("0011111","0100100","1000100","0100100","0011111"); }
       function B() { return bld("1111111","1001001","1001001","1001001","0110110"); }
@@ -74,14 +89,13 @@
       function _8() {return bld("0110110","1001001","1001001","1001001","0110110"); }
       function _9() {return bld("0110010","1001001","1001001","1001001","0111110"); }
       function _exc() {return bld("0000000","0110000","1111101","0110000","0000000"); }
-      function _at() {return bld("0000000","0000000","0000000","0000000","0000000"); }
       function _hsh() {return bld("0010100","0111110","0010100","0111110","0010100"); }
       function _dol() {return bld("0010000","0101010","1111111","0101010","0000100"); }
       function _per() {return bld("0110010","0110100","0001000","0010110","0100110"); }
       function _amp() {return bld("0110110","1001001","0110101","0000010","0000101"); }
       function _ast() {return bld("0100100","0011000","0111100","0011000","0100100"); }
-      function _op() {return bld("0000000","0000000","0111110","1000001","0000000"); }
-      function _cp() {return bld("0000000","1000001","0111110","0000000","0000000"); }
+      function _op() {return bld("0000000","0111110","1000001","0000000"); }
+      function _cp() {return bld("0000000","1000001","0111110","0000000"); }
 
 
       function Msg(str, xStart) {
@@ -90,7 +104,7 @@
         this.x = xStart;
 
         Msg.prototype.draw=function(cfg,xPos,yPos) {
-          for(var i = 0; i<str.length; i++) {
+          for(var i = 0; i<this.msg.length; i++) {
             if(this.msg[i] == 1) {
               cfg.context.beginPath();
               cfg.context.arc(xPos, 2*this.r*i+this.r+yPos, this.r, 0, 2*Math.PI, false);
@@ -103,9 +117,11 @@
       }
 
       function init(cfg) {
+        //alert(get('msg'));
         cfg.canvas.addEventListener('mousedown', canvasMouseDown, false);
-        cfg.buffer[0] = cfg.buffer[0].concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z(),_0(),_1(),_2(),_3(),_4(),_5(),_6(),_7(),_8(),_9(),_exc(),_at(),_hsh(),_dol(),_per(),_amp(),_ast(),_op(),_cp());
-        cfg.buffer[1] = cfg.buffer[1].concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z(),_0(),_1(),_2(),_3(),_4(),_5(),_6(),_7(),_8(),_9(),_exc(),_at(),_hsh(),_dol(),_per(),_amp(),_ast(),_op(),_cp());
+        //cfg.buffer[0] = cfg.buffer[0].concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z(),_0(),_1(),_2(),_3(),_4(),_5(),_6(),_7(),_8(),_9(),_exc(),_hsh(),_dol(),_per(),_amp(),_ast(),_op(),_cp());
+        cfg.buffer[0] = translate(get('msg').toUpperCase());
+        //cfg.buffer[1] = cfg.buffer[1].concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z(),_0(),_1(),_2(),_3(),_4(),_5(),_6(),_7(),_8(),_9(),_exc(),_hsh(),_dol(),_per(),_amp(),_ast(),_op(),_cp());
         for(var i = 0; i<80; i++) {
           cfg.state[0].push(new Msg("0000000000"));
           cfg.state[1].push(new Msg("0000000000"));
@@ -133,11 +149,12 @@
       function renderNextFrame(cfg) {
         cfg.context.clearRect(0, 0, cfg.canvas.width, cfg.canvas.height);
         cfg.generation += 1;
-        cfg.state[0].push(cfg.buffer[0].shift());
-        cfg.state[1].push(cfg.buffer[1].shift());
+        //TODO: check out the buffering here. possibly skipping a vertical render
         cfg.buffer[0].push(cfg.state[0].shift());
         cfg.buffer[1].push(cfg.state[1].shift());
         drawState(cfg);
+        cfg.state[0].push(cfg.buffer[0].shift());
+        cfg.state[1].push(cfg.buffer[1].shift());
         if(cfg.enabled) window.setTimeout(renderNextFrame, 1000/cfg.framerate, cfg);
       }
 
