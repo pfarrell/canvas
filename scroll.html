@@ -21,7 +21,7 @@
         -->
           <td>
             <div>
-              <canvas id="scroll" height="160" width="800" style="background-color:#000;border:solid #666 1px;"></canvas>
+              <canvas id="scroll" height="90" width="500" style="background-color:#000;border:solid #666 1px;"></canvas>
             </div>
           </td>
         </tr>
@@ -31,11 +31,12 @@
 
       function get(n){
         var half = location.search.split(n+'=')[1];
-        return half? decodeURIComponent(half.split('&')[0]):null;
+        return half? decodeURIComponent(half.split('&')[0]):"";
       }
 
       function bld() {
         var retval = [];
+        if(arguments == null) return;
         for(var i=0; i<arguments.length; i++) {
           retval.push(new Msg(arguments[i]));
         }
@@ -44,8 +45,8 @@
       }
 
       function translate(str) {
-        //var font = new Simple();
         var font = new Simple();
+        //var font = new Cook();
         var retval=[];
         for(var i=0; i<str.length; i++) {
           var f = "_" + str[i].charCodeAt(0);
@@ -55,18 +56,22 @@
       }  
 
       function Simple() {
-        Simple.prototype._32 = function() { return bld("0000000","0000000"); }                               // space
-        Simple.prototype._33 = function() { return bld("0000000","0110000","1111101","0110000","0000000"); } // !
+        Simple.prototype._32 = function() { return bld("0000000"); }                                         // space
+        Simple.prototype._33 = function() { return bld("0110000","1111101","0110000"); }                     // !
+        Simple.prototype._34 = function() { return bld("1100000","0000000","1100000"); }                     // "
         Simple.prototype._35 = function() { return bld("0010100","0111110","0010100","0111110","0010100"); } // #
         Simple.prototype._36 = function() { return bld("0010000","0101010","1111111","0101010","0000100"); } // $
         Simple.prototype._37 = function() { return bld("0110010","0110100","0001000","0010110","0100110"); } // %
         Simple.prototype._38 = function() { return bld("0110110","1001001","0110101","0000010","0000101"); } // &
-        Simple.prototype._39 = function() { return bld("1100000"); } // *
+        Simple.prototype._39 = function() { return bld("1100000"); }                                         // '
         Simple.prototype._40 = function() { return bld("0000000","0111110","1000001","0000000"); }           // (
         Simple.prototype._41 = function() { return bld("0000000","1000001","0111110","0000000"); }           // )
-        Simple.prototype._44 = function() { return bld("0000110","0000111"); }                               // ,
+        Simple.prototype._42 = function() { return bld("1100000","1100000"); }                               // *
+        Simple.prototype._43 = function() { return bld("0001000","0011100","0001000"); }                     // +
+        Simple.prototype._44 = function() { return bld("0000011"); }                                         // ,
         Simple.prototype._45 = function() { return bld("0001000","0001000","0001000"); }                     // -
         Simple.prototype._46 = function() { return bld("0000011","0000011"); }                               // .
+        Simple.prototype._47 = function() { return bld("0000010","0000100","0001000","0010000","0100000"); } // .
         Simple.prototype._48 = function() { return bld("0111110","1010001","1001001","1000101","0111110"); } // 0
         Simple.prototype._49 = function() { return bld("0000000","0100001","1111111","0000001","0000000"); } // 1
         Simple.prototype._50 = function() { return bld("0100001","1000011","1000101","1001001","0110001"); } // 2
@@ -75,9 +80,15 @@
         Simple.prototype._53 = function() { return bld("1110010","1001001","1001001","1001001","1000110"); } // 5
         Simple.prototype._54 = function() { return bld("0111110","1001001","1001001","1001001","0100110"); } // 6
         Simple.prototype._55 = function() { return bld("1000001","1000010","1000100","1001000","1110000"); } // 7
-        Simple.prototype._58 = function() { return bld("0110110","1001001","1001001","1001001","0110110"); } // 8
-        Simple.prototype._59 = function() { return bld("0110010","1001001","1001001","1001001","0111110"); } // 9
+        Simple.prototype._56 = function() { return bld("0110110","1001001","1001001","1001001","0110110"); } // 8
+        Simple.prototype._57 = function() { return bld("0110010","1001001","1001001","1001001","0111110"); } // 9
+        Simple.prototype._58 = function() { return bld("0010100") };                                         // :
+        Simple.prototype._59 = function() { return bld("0010110") };                                         // ;
+        Simple.prototype._60 = function() { return bld("0001000","0010100","0100010"); }                     // <
+        Simple.prototype._61 = function() { return bld("0010100","0010100","0010100"); }                     // =
+        Simple.prototype._62 = function() { return bld("0100010","0010100","0001000"); }                     // >
         Simple.prototype._63 = function() { return bld("0100000","1000000","1000101","1001000","0110000"); } // ?
+        Simple.prototype._64 = function() { return bld(); }                                                  // @
         Simple.prototype._65 = function() { return bld("0011111","0100100","1000100","0100100","0011111"); } // A
         Simple.prototype._66 = function() { return bld("1111111","1001001","1001001","1001001","0110110"); } // B
         Simple.prototype._67 = function() { return bld("0111110","1000001","1000001","1000001","0100010"); } // C
@@ -104,57 +115,19 @@
         Simple.prototype._88 = function() { return bld("1100011","0010100","0001000","0010100","1100011"); } // X
         Simple.prototype._89 = function() { return bld("1100000","0010000","0001111","0010000","1100000"); } // Y
         Simple.prototype._90 = function() { return bld("1000011","1000101","1001001","1010001","1100001"); } // Z
+        Simple.prototype._91 = function() { return bld("1111111","1000001"); }                               // [
+        Simple.prototype._92 = function() { return bld("0100000","0010000","0001000","0000100","0000010"); } // \
+        Simple.prototype._93 = function() { return bld("1000001","1111111"); }                               // [
+        Simple.prototype._94 = function() { return bld("0100000","1000000","0100000"); }                     // ^
+        Simple.prototype._95 = function() { return bld("0000001","0000001","0000001"); }                     // _
+        Simple.prototype._96 = function() { return bld("1000000","0100000"); }                               // `
+        // lowercase not supported, translated to uppercase
+        Simple.prototype._123 = function() { return bld("0001000","0110110","1000001"); }                     // {
+        Simple.prototype._124 = function() { return bld("1111111"); }                                         // |
+        Simple.prototype._125 = function() { return bld("1000001","0110110","0001000"); }                     // }
+        Simple.prototype._126 = function() { return bld("0001000","0010000","0001000","0000100"); }           // ~
       }
 
-      function Cook() {
-        Cook.prototype._65 = function() { return bld("0111111111111","1111111111111","1111111111111","1110011100000","1110011100000","1110011100000","1111111111111","1111111111111","0111111111111"); }
-        Cook.prototype._66 = function() { return bld("1111111111111","1111111111111","1111111111111","1110011100111","1110011100111","1110011100111","1111111111111","1111111111111","0111110111110"); }
-        Cook.prototype._67 = function() { return bld("0111111111110","1111111111111","1111111111111","1110000000111","1110000000111","1110000000111","1110000000111","1110000000111","1110000000111"); }
-        Cook.prototype._68 = function() { return bld("1111111111111","1111111111111","1111111111111","1110000000111","1110000000111","1110000000111","1111111111111","1111111111111","0111111111110"); }
-        Cook.prototype._69 = function() { return bld("0111111111110","1111111111111","1111111111111","1110011100111","1110011100111","1110011100111","1110011100111","1110011100111","1110000000111"); }
-        Cook.prototype._70 = function() { return bld("1111111111111","1111111111111","1111111111111","1110011100000","1110011100000","1110011100000","1110011100000","1110011100000","1110000000000"); }
-        Cook.prototype._71 = function() { return bld("0111111111110","1111111111111","1111111111111","1110000000111","1110000000111","1110011100111","1110011111111","1110011111111","1110001111110"); }
-        Cook.prototype._72 = function() { return bld("1111111111111","1111111111111","1111111111111","0000011100000","0000011100000","0000011100000","1111111111111","1111111111111","1111111111111"); }
-        Cook.prototype._73 = function() { return bld("1110000000111","1110000000111","1110000000111","1111111111111","1111111111111","1111111111111","1110000000111","1110000000111","1110000000111"); }
-        Cook.prototype._74 = function() { return bld("0000000001110","0000000001111","0000000001111","0000000000111","0000000000111","0000000000111","1111111111111","1111111111111","1111111111110"); }
-        Cook.prototype._75 = function() { return bld("1111111111111","1111111111111","1111111111111","0000011100000","0000111110000","0001111111000","0011110111100","0111000001110","1110000000111"); }
-        Cook.prototype._76 = function() { return bld("1111111111111","1111111111111","1111111111111","1110000000000","1110000000000","0000000000000","1111111111111","1111111111111","1111111111111"); }
-        Cook.prototype._77 = function() { return bld("0111111111111","1111111111111","1111111111111","0111100000000","0011110000000","0111100000000","1111111111111","1111111111111","0111111111111"); }
-        Cook.prototype._78 = function() { return bld("1111111111111","1111111111111","1111111111111","0011110000000","0000111100000","0000001111000","1111111111111","1111111111111","1111111111111"); }
-        Cook.prototype._79 = function() { return bld("0111111111110","1111111111111","1111111111111","1110000000111","1110000000111","1110000000111","1111111111111","1111111111111","0111111111110"); }
-        Cook.prototype._80 = function() { return bld("1111111","1001000","1001000","1001000","0110000"); }
-        Cook.prototype._81 = function() { return bld("0111110","1000001","1000101","1000011","0111110"); }
-        Cook.prototype._82 = function() { return bld("1111111","1001000","1001100","1001010","0110001"); }
-        Cook.prototype._83 = function() { return bld("0110010","1001001","1001001","1001001","0100110"); }
-        Cook.prototype._84 = function() { return bld("1000000","1000000","1111111","1000000","1000000"); }
-        Cook.prototype._85 = function() { return bld("1111110","0000001","0000001","0000001","1111110"); }
-        Cook.prototype._86 = function() { return bld("1111100","0000010","0000001","0000010","1111100"); }
-        Cook.prototype._87 = function() { return bld("1111110","0000001","0001110","0000001","1111110"); }
-        Cook.prototype._88 = function() { return bld("1100011","0010100","0001000","0010100","1100011"); }
-        Cook.prototype._89 = function() { return bld("1100000","0010000","0001111","0010000","1100000"); }
-        Cook.prototype._90 = function() { return bld("1000011","1000101","1001001","1010001","1100001"); }
-        Cook.prototype._48 = function() {return bld("0111110","1010001","1001001","1000101","0111110"); }
-        Cook.prototype._49 = function() {return bld("0000000","0100001","1111111","0000001","0000000"); }
-        Cook.prototype._50 = function() {return bld("0100001","1000011","1000101","1001001","0110001"); }
-        Cook.prototype._51 = function() {return bld("0100010","1000001","1001001","1001001","0110110"); }
-        Cook.prototype._52 = function() {return bld("1111000","0001000","0001000","1111111","0001000"); }
-        Cook.prototype._53 = function() {return bld("1110010","1001001","1001001","1001001","1000110"); }
-        Cook.prototype._54 = function() {return bld("0111110","1001001","1001001","1001001","0100110"); }
-        Cook.prototype._55 = function() {return bld("1000001","1000010","1000100","1001000","1110000"); }
-        Cook.prototype._56 = function() {return bld("0110110","1001001","1001001","1001001","0110110"); }
-        Cook.prototype._57 = function() {return bld("0110010","1001001","1001001","1001001","0111110"); }
-        /*
-        function _exc() {return bld("0000000","0110000","1111101","0110000","0000000"); }
-        function _at() {return bld("0000000","0000000","0000000","0000000","0000000"); }
-        function _hsh() {return bld("0010100","0111110","0010100","0111110","0010100"); }
-        function _dol() {return bld("0010000","0101010","1111111","0101010","0000100"); }
-        function _per() {return bld("0110010","0110100","0001000","0010110","0100110"); }
-        function _amp() {return bld("0110110","1001001","0110101","0000010","0000101"); }
-        function _ast() {return bld("0100100","0011000","0111100","0011000","0100100"); }
-        function _op() {return bld("0000000","0000000","0111110","1000001","0000000"); }
-        function _cp() {return bld("0000000","1000001","0111110","0000000","0000000"); }
-        */
-      }
 
       function Msg(str, xStart) {
         this.msg = str;
@@ -175,14 +148,12 @@
       }
 
       function init(cfg) {
-        //alert(get('msg'));
+        var msg = get('msg');
         cfg.canvas.addEventListener('mousedown', canvasMouseDown, false);
-        //cfg.buffer[0] = cfg.buffer[0].concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z(),_0(),_1(),_2(),_3(),_4(),_5(),_6(),_7(),_8(),_9(),_exc(),_hsh(),_dol(),_per(),_amp(),_ast(),_op(),_cp());
         cfg.buffer[0] = translate(get('msg').toUpperCase());
         //cfg.buffer[1] = cfg.buffer[1].concat(A(),B(),C(),D(),E(),F(),G(),H(),I(),J(),K(),L(),M(),N(),O(),P(),Q(),R(),S(),T(),U(),V(),W(),X(),Y(),Z(),_0(),_1(),_2(),_3(),_4(),_5(),_6(),_7(),_8(),_9(),_exc(),_hsh(),_dol(),_per(),_amp(),_ast(),_op(),_cp());
-        for(var i = 0; i<80; i++) {
+        for(var i = 0; i<50; i++) {
           cfg.state[0].push(new Msg("0000000000"));
-          cfg.state[1].push(new Msg("0000000000"));
         }
         renderNextFrame(meta);
       }
@@ -209,19 +180,14 @@
         cfg.generation += 1;
         //TODO: check out the buffering here. possibly skipping a vertical render
         cfg.buffer[0].push(cfg.state[0].shift());
-        cfg.buffer[1].push(cfg.state[1].shift());
         drawState(cfg);
         cfg.state[0].push(cfg.buffer[0].shift());
-        cfg.state[1].push(cfg.buffer[1].shift());
         if(cfg.enabled) window.setTimeout(renderNextFrame, 1000/cfg.framerate, cfg);
       }
 
       function drawState(cfg) {
         for(var i = 0; i<cfg.state[0].length; i++) {
-          cfg.state[0][i].draw(cfg, 10*i,0);
-        }
-        for(var i = 0; i<cfg.state[1].length; i++) {
-          cfg.state[1][i].draw(cfg, 10*i,80);
+          cfg.state[0][i].draw(cfg, 10*i,10);
         }
       }
 
@@ -243,11 +209,10 @@
         origin: {x:document.getElementById('scroll').clientWidth / 2, y:document.getElementById('scroll').clientHeight / 2},
         enabled: true,
         generation: 0,
-        framerate: 5,
-        state:[[],[]],
-        buffer: [[],[]],
+        framerate: 24,
+        state:[[]],
+        buffer: [[]],
       }
-
       init(meta);
 
     </script>
