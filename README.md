@@ -8,7 +8,7 @@ All this is my own code and I've attempted to use no libraries other than raw HT
 * [cosined](http://rawgithub.com/pfarrell/canvas/master/cosined.html)
 * [scroll][scroll]
 * [spiral](http://rawgithub.com/pfarrell/canvas/master/spiral.html)
-* [Conway's Game of canvas](http://rawgithub.com/pfarrell/canvas/master/gol.html)
+* [Conway's Game of Life](http://rawgithub.com/pfarrell/canvas/master/gol.html)
 
 
 [scroll]: https://rawgithub.com/pfarrell/canvas/master/scroll.html?msg=Thanks%20for%20checking%20out%20my%20scroller%20(:
