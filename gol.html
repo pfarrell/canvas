@@ -325,6 +325,8 @@
         arr = window[arrname];
         cfg.cellsX=arr[2];
         cfg.cellsY=arr[2];
+        document.getElementById("cellsX").value = arr[2];
+        document.getElementById("cellsY").value = arr[2];
         resetCanvas(cfg);
         if(arr == null) return;
         cfg.population = arr[0].length;
