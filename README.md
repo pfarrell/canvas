@@ -7,7 +7,7 @@ All this is my own code and I've attempted to use no libraries other than raw HT
 * [bouncy](http://rawgithub.com/pfarrell/canvas/master/bouncy.html)
 * [cosined](http://rawgithub.com/pfarrell/canvas/master/cosined.html)
 * [scroll][scroll]
-* [spiral](http://rawgithub.com/pfarrell/canvas/master/sprial.html)
+* [spiral](http://rawgithub.com/pfarrell/canvas/master/spiral.html)
 * [Conway's Game of canvas](http://rawgithub.com/pfarrell/canvas/master/gol.html)
 
 
